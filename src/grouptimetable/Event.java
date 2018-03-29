@@ -11,4 +11,10 @@ package grouptimetable;
  */
 public class Event {
     
+    public String Ivykis[] = new String[100];
+    
+    public void setIvykis(int index, String event){
+        Ivykis[index].equals(event);
+        System.out.println(Ivykis[index]);
+    }
 }
