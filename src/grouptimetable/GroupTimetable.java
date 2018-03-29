@@ -11,11 +11,10 @@ package grouptimetable;
  */
 public class GroupTimetable {
 
-    /**
-     * @param args the command line arguments
-     */
-    /*public static void main(String[] args) {
-        // TODO code application logic here
-    }*/
+    
+    public static void main(String[] args) {
+        Event EventObject = new Event();
+        EventObject.setIvykis(0, "Labas");
+    }
     
 }
