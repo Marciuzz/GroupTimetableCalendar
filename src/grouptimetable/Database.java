@@ -20,6 +20,14 @@ public class Database {
             new Event("2018-04-03", "10:00 - 12:00", "Event50", "common"),
             new Event("2018-04-03", "12:00 - 14:00", "Event60", "common")
     ));
+    List<Person> personDatabase = new ArrayList<Person>(Arrays.asList(
+            new MIFSAStudent("MIFSAStudent1", "Surname1", "IT", 1),
+            new MIFSAStudent("MIFSAStudent2", "Surname2", "MED", 2),
+            new Student("Student1", "Surname3", "IT", 2),
+            new Student("Student2", "Surname4", "MED", 1),
+            new Teacher("Teacher1", "Surname5"),
+            new Teacher("Teacher1", "Surname6")
+    ));
     
     public List getCommonEventsOfTheDay(String date) {
         List<Event> eventsToReturn = new ArrayList<Event>();
@@ -43,14 +51,16 @@ public class Database {
         }
         return eventsToReturn;
     }
+/*
     public void addEvent(Event evt) {
-        /*System.out.println(eventsDatabase.length);
-        eventsDatabase[eventsDatabase.length] = evt;*/
         eventsDatabase.add(evt);
     }
     
     public List getEvents(String date) {
         return eventsDatabase;
-        
+    }
+*/
+    public List getPersonList() {
+        return personDatabase;
     }
 }

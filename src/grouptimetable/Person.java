@@ -7,6 +7,10 @@ abstract public class Person {
     String name;
     String lastName;
     
+    public Person(String name, String lastName) {
+        this.name = name;
+        this.lastName = lastName;
+    }
     void setValues(String name, String lastName) {
         this.name = name;
         this.lastName = lastName;
@@ -15,7 +19,7 @@ abstract public class Person {
     public void setName(String name){
         this.name = name;
     }
-    public void setPavarde(String lastName){
+    public void setLastName(String lastName){
         lastName = name;
     }
     

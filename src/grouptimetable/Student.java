@@ -14,6 +14,13 @@ public class Student extends Person {
     int yearOfStudy;    // 1, 2, 3, 4
     boolean isMIFSAstudent = false;
     
+    public Student(String name, String lastName, String typeOfStudy, int yearOfStudy) {
+        super(name, lastName);
+        this.setPersonType("Student");
+        this.setTypeOfStudy(typeOfStudy);
+        this.setYearOfStudy(yearOfStudy);
+    }
+    
     //overriding Person class (superclass) method setValues, but still calling the super class method to set the name and lastName
     public void setValues(String name, String lastName, String typeOfStudy, int yearOfStudy) {
         super.setValues(name, lastName);

@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import javax.swing.DefaultListModel;
+import javax.swing.ListModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +36,7 @@ public class MainJFrame extends javax.swing.JFrame {
         calendarPanel1.setSelectedDate(LocalDate.now());
         calendarPanel1.addCalendarListener(new SampleCalendarListener());
         getTimetable(LocalDate.now().toString());
+        getPersonList();
     }
 
     /**
@@ -53,6 +56,8 @@ public class MainJFrame extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         calendarPanel1 = new com.github.lgooddatepicker.components.CalendarPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GroupTimetableProject");
@@ -132,6 +137,13 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jList1MouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jList1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -140,7 +152,9 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 925, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(calendarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(calendarPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -149,7 +163,9 @@ public class MainJFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(calendarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
 
         bindingGroup.bind();
@@ -177,17 +193,23 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jLabel2PropertyChange
-
+    /* TO REMOVE */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         System.out.println("Button1");
-        this.addItem( new Object[]{"8:30 - 10:00", "Web Programming"} );
+        this.addItemToTimetable( new Object[]{"8:30 - 10:00", "Web Programming"} );
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public void addItem(Object[] item) {
+    private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
+        String selected = jList1.getSelectedValue();
+        System.out.println("jList1MouseClicked: "+selected);
+    }//GEN-LAST:event_jList1MouseClicked
+    /* TO REMOVE */
+    public void addItemToTimetable(Object[] item) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.addRow(item);
     }
-    public void addItems(Object[][] items) {
+    /* TO REMOVE */
+    public void addItemsToTimetable(Object[][] items) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         for (int i=0; i<items.length; i++) {
             if (items[i][0] != null){
@@ -195,6 +217,22 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         }
     }
+    
+    
+    public void addPersonToPersonList(List<Person> personList) {
+        jList1.setModel(new DefaultListModel());
+        DefaultListModel model = (DefaultListModel) jList1.getModel();
+        for(Person p : personList){
+             model.addElement(p.getName()+" "+p.getLastName());
+        }    
+        jList1.setModel(model);     
+        jList1.setSelectedIndex(0);
+    }
+    public void getPersonList() {
+        List<Person> personList = db.getPersonList();
+        addPersonToPersonList(personList);
+    }
+    
     public void clearTimetable() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
@@ -276,8 +314,10 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
