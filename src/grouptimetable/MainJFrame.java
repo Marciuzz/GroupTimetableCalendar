@@ -5,8 +5,13 @@ import com.github.lgooddatepicker.zinternaltools.CalendarSelectionEvent;
 import com.github.lgooddatepicker.zinternaltools.YearMonthChangeEvent;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import org.apache.commons.lang3.StringUtils;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,6 +24,7 @@ import javax.swing.table.TableModel;
  * @author martynas
  */
 public class MainJFrame extends javax.swing.JFrame {
+    public Database db = new Database();
 
     /**
      * Creates new form MainJFrame
@@ -183,12 +189,36 @@ public class MainJFrame extends javax.swing.JFrame {
     public void addItems(Object[][] items) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         for (int i=0; i<items.length; i++) {
-            model.addRow(items[i]);
+            if (items[i][0] != null){
+                model.addRow(items[i]);
+            }
         }
     }
     public void clearTimetable() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
+    }
+    public void addEventsToTimetable(List<Event> eventList) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        for (int i = 0; i < eventList.size(); i++) {
+            if(eventList.get(i) != null) {
+                Event temp = eventList.get(i);
+                Object[] obj = new Object[]{temp.getEventHourTime(), temp.getEventName()};
+                model.addRow(obj);
+            }     
+	}
+    }
+    public List<Event> sortTimetableByEventStartTime(List<Event> list1, List<Event> list2) {
+        list1.addAll(list2);
+        Collections.sort(list1, new CustomComparator());
+        //Collections.sort(list1);
+        /*for (int i=0; i<list1.size(); i++) {
+            Event temp = list1.get(i);
+            int hour = Integer.parseInt(temp.getEventHourTime().substring(0,2));
+            sortedTimetable.add(temp, hour);
+            System.out.println(temp.getEventHourTime().substring(0,2));
+        }*/
+        return list1;
     }
     public class SampleCalendarListener implements CalendarListener {
 
@@ -201,16 +231,25 @@ public class MainJFrame extends javax.swing.JFrame {
          * twice in a row. This is so that the programmer can catch all events of interest.
          * Duplicate events can optionally be detected with the function
          * CalendarSelectionEvent.isDuplicate().
+         * 
+         * Method is overriden:
+         *  It clears the TimeTable
+         *  Gets the common events of the day list of events
+         *  Gets the personal events of the day list of events
+         *  Sorts the TimeTable with a custom comparator by the starting hour
+         *  Adds sorted TimeTable to the jTable1 component
          */
         @Override
         public void selectedDateChanged(CalendarSelectionEvent event) {
             LocalDate oldDate = event.getOldDate();
             LocalDate newDate = event.getNewDate();
-            System.out.println("Date changed from "+oldDate.toString()+" to "+newDate.toString());
-            clearTimetable();
-            addItem(new Object[]{"12:00 - 14:00", "Object-oriented programming in Java"});
             
-            //Should be something like get persons events for that day
+            clearTimetable();
+            List<Event> commonEventsOfTheDay = db.getCommonEventsOfTheDay(newDate.toString());
+            String personName = "martynas";                                                                             // HARDCODED PERSON FOR NOW
+            List<Event> personalEventsOfTheDay = db.getPersonalEventsOfTheDay(newDate.toString(), personName);
+            List<Event> sortedTimetable = sortTimetableByEventStartTime(commonEventsOfTheDay, personalEventsOfTheDay);
+            addEventsToTimetable(sortedTimetable);
             
         }
         @Override
@@ -222,6 +261,12 @@ public class MainJFrame extends javax.swing.JFrame {
             System.out.println(oldYearMonthString+" "+newYearMonthString);*/
         }
     }
+    public class CustomComparator implements Comparator<Event> {
+    @Override
+    public int compare(Event e1, Event e2) {
+        return e1.getEventHourTime().compareTo(e2.getEventHourTime());
+    }
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.github.lgooddatepicker.components.CalendarPanel calendarPanel1;
     private javax.swing.JButton jButton1;

@@ -1,5 +1,8 @@
 package grouptimetable;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 public class Main {
@@ -9,12 +12,9 @@ public class Main {
         mjf.setVisible(true);
         
         
-        Database db = new Database();
-        Object[][] commonEvents = db.getCommonEvents();
-        mjf.addItems(commonEvents);
         //mjf.addItem(new Object[]{"8:30 - 10:00", "Web Programming"});
-        Date date = new Date();
-        Event EventObject = new Event(0, "Java programming exercises", date);
+        //Date date = new Date();
+        //Event EventObject = new Event(LocalDate.of(2018, 04, 01), "Java programming exercises");
         
         MIFSAStudent studTest = new MIFSAStudent();
         studTest.setValues("Name", "Surname", "IT", 1);
@@ -29,5 +29,7 @@ public class Main {
         Student studTest3 = new Student();
         studTest3.setValues("Name3", "Surname3", "IT", 1);
         System.out.println(studTest3.getValues());
+        
+        //db.populateDatabase();
     }
 }

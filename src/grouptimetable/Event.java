@@ -1,17 +1,46 @@
 package grouptimetable;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
-public class Event {
-    public String Events[][] = new String[100][2];
+public class Event { 
+    String eventDate;
+    String eventHourTime;
+    String eventName;
+    String eventType;
     
     //Event constructor
-    public Event(int index, String event, Date date) {
-        SimpleDateFormat ft = new SimpleDateFormat("yyyy.MM.dd 'at' hh:mm");
-        Events[index][0] = event;
-        Events[index][1] = ft.format(date);
-        System.out.println(Events[index][0] + " " + Events[index][1]);
+    public Event(String date, String hourTime, String eventName, String eventType) {
+        this.eventDate = date;
+        this.eventHourTime = hourTime;
+        this.eventName = eventName;
+        this.eventType = eventType;
     }
     
+    public void setEventDate(String date) {
+        this.eventDate = date;
+    }
+    public void setEventHourTime(String hourTime) {
+        this.eventHourTime = hourTime;
+    }
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+    
+    public String getEventDate() {
+        return eventDate;
+    }
+    public String getEventHourTime() {
+        return eventHourTime;
+    }
+    public String getEventName() {
+        return eventName;
+    }
+    public String getEventType() {
+        return eventType;
+    }
 }
