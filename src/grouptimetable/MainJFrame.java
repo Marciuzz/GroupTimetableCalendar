@@ -35,7 +35,7 @@ public class MainJFrame extends javax.swing.JFrame {
         initComponents();
         calendarPanel1.setSelectedDate(LocalDate.now());
         calendarPanel1.addCalendarListener(new SampleCalendarListener());
-        this.personName = db.getFirstPersonInTheList();
+        this.personName = db.getFirstPersonInThePersonList();
         getTimetable(LocalDate.now().toString(), personName);
         getPersonList();
     }
@@ -197,7 +197,6 @@ public class MainJFrame extends javax.swing.JFrame {
     /* TO REMOVE */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         System.out.println("Button1");
-        this.addItemToTimetable( new Object[]{"8:30 - 10:00", "Web Programming"} );
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
@@ -205,21 +204,6 @@ public class MainJFrame extends javax.swing.JFrame {
         this.personName = selected;
         getTimetable(calendarPanel1.getSelectedDate().toString(), this.personName);
     }//GEN-LAST:event_jList1MouseClicked
-    /* TO REMOVE */
-    public void addItemToTimetable(Object[] item) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.addRow(item);
-    }
-    /* TO REMOVE */
-    public void addItemsToTimetable(Object[][] items) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        for (int i=0; i<items.length; i++) {
-            if (items[i][0] != null){
-                model.addRow(items[i]);
-            }
-        }
-    }
-    
     
     public void addPersonToPersonList(List<Person> personList) {
         jList1.setModel(new DefaultListModel());
