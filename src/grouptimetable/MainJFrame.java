@@ -33,6 +33,7 @@ public class MainJFrame extends javax.swing.JFrame {
         initComponents();
         calendarPanel1.setSelectedDate(LocalDate.now());
         calendarPanel1.addCalendarListener(new SampleCalendarListener());
+        getTimetable(LocalDate.now().toString());
     }
 
     /**
@@ -220,6 +221,23 @@ public class MainJFrame extends javax.swing.JFrame {
         }*/
         return list1;
     }
+        /**
+         * getTimetable method steps:
+         *  It clears the TimeTable
+         *  Gets the common events of the day list of events
+         *  Gets the personal events of the day list of events
+         *  Sorts the TimeTable with a custom comparator by the starting hour
+         *  Adds sorted TimeTable to the jTable1 component
+         */
+    public void getTimetable(String date) {
+        clearTimetable();
+        List<Event> commonEventsOfTheDay = db.getCommonEventsOfTheDay(date);
+        String personName = "martynas";                                                                             // HARDCODED PERSON FOR NOW
+        List<Event> personalEventsOfTheDay = db.getPersonalEventsOfTheDay(date, personName);
+        List<Event> sortedTimetable = sortTimetableByEventStartTime(commonEventsOfTheDay, personalEventsOfTheDay);
+        addEventsToTimetable(sortedTimetable);
+    }
+    
     public class SampleCalendarListener implements CalendarListener {
 
         /**
@@ -231,26 +249,12 @@ public class MainJFrame extends javax.swing.JFrame {
          * twice in a row. This is so that the programmer can catch all events of interest.
          * Duplicate events can optionally be detected with the function
          * CalendarSelectionEvent.isDuplicate().
-         * 
-         * Method is overriden:
-         *  It clears the TimeTable
-         *  Gets the common events of the day list of events
-         *  Gets the personal events of the day list of events
-         *  Sorts the TimeTable with a custom comparator by the starting hour
-         *  Adds sorted TimeTable to the jTable1 component
          */
         @Override
         public void selectedDateChanged(CalendarSelectionEvent event) {
             LocalDate oldDate = event.getOldDate();
             LocalDate newDate = event.getNewDate();
-            
-            clearTimetable();
-            List<Event> commonEventsOfTheDay = db.getCommonEventsOfTheDay(newDate.toString());
-            String personName = "martynas";                                                                             // HARDCODED PERSON FOR NOW
-            List<Event> personalEventsOfTheDay = db.getPersonalEventsOfTheDay(newDate.toString(), personName);
-            List<Event> sortedTimetable = sortTimetableByEventStartTime(commonEventsOfTheDay, personalEventsOfTheDay);
-            addEventsToTimetable(sortedTimetable);
-            
+            getTimetable(newDate.toString());
         }
         @Override
         public void yearMonthChanged(YearMonthChangeEvent event) {

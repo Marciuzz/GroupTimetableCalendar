@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class Database {
-    //Could probably remove the Database class later, and add all event-related methods and variables to Event Class. The same with other classes (Student, Teacher ...)
+    //Could probably remove the Database class, and add all event-related methods and variables to Event Class. The same with other classes (Student, Teacher ...)
     //Initialization using Arrays.asList, imitates having predefined data e.g. in file system
     List<Event> eventsDatabase = new ArrayList<Event>(Arrays.asList(
             new Event("2018-04-01", "10:00 - 12:00", "Event10", "common"),
