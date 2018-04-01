@@ -1,20 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package grouptimetable;
 
-/**
- *
- * @author martynas
- */
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Event {
     
-    public String Ivykis[] = new String[100];
+    public String Events[][] = new String[100][2];
     
-    public void setIvykis(int index, String event){
-        Ivykis[index].equals(event);
-        System.out.println(Ivykis[index]);
+    public void setEvent(int index, String event, Date date){
+        
+        //SimpleDateFormat ft = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a zzz");
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy.MM.dd 'at' hh:mm");
+        Events[index][0] = event;
+        Events[index][1] = ft.format(date);
+        System.out.println(Events[index][0] + " " + Events[index][1]);
     }
 }

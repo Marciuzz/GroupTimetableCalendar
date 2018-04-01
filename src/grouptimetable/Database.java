@@ -5,10 +5,6 @@
  */
 package grouptimetable;
 
-/**
- *
- * @author martynas
- */
 public class Database {
     
 }

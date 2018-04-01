@@ -1,20 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package grouptimetable;
 
-/**
- *
- * @author martynas
- */
+import java.util.Date;
+
 public class GroupTimetable {
 
     
     public static void main(String[] args) {
+        
+        /* Create and display the MainJFrame form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainJFrame().setVisible(true);
+            }
+        });
+        
         Event EventObject = new Event();
-        EventObject.setIvykis(0, "Labas");
+        Date date = new Date();
+        EventObject.setEvent(0, "Java programming exercises", date);
+        
+        MIFSAStudent studTest = new MIFSAStudent();
+        studTest.setValues("Vardas", "Pavarde", "Studentas", "IT", 1);
+        System.out.println(studTest.getValues());
+        studTest.setName("newName");
+        System.out.println(studTest.isMIFSAstudent);
     }
     
 }
