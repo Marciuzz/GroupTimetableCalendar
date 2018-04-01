@@ -11,14 +11,22 @@ public class Database {
     //Could probably remove the Database class, and add all event-related methods and variables to Event Class. The same with other classes (Student, Teacher ...)
     //Initialization using Arrays.asList, imitates having predefined data e.g. in file system
     List<Event> eventsDatabase = new ArrayList<Event>(Arrays.asList(
-            new Event("2018-04-01", "10:00 - 12:00", "Event10", "common"),
-            new Event("2018-04-01", "12:00 - 14:00", "Event20", "martynas"),
-            new Event("2018-04-01", "18:00 - 20:00", "Event80", "martynas"),
-            new Event("2018-04-01", "16:00 - 20:00", "Event90", "martynas"),
-            new Event("2018-04-02", "10:00 - 12:00", "Event30", "common"),
-            new Event("2018-04-02", "12:00 - 14:00", "Event40", "common"),
-            new Event("2018-04-03", "10:00 - 12:00", "Event50", "common"),
-            new Event("2018-04-03", "12:00 - 14:00", "Event60", "common")
+            new Event("2018-04-01", "10:00 - 12:00", "Event10", "MIFSAStudent1 Surname1"),
+            new Event("2018-04-01", "12:00 - 13:00", "Event15", "MIFSAStudent1 Surname1"),
+            new Event("2018-04-01", "16:00 - 18:00", "Event19", "MIFSAStudent1 Surname1"),
+            new Event("2018-04-01", "12:00 - 14:00", "Event20", "MIFSAStudent2 Surname2"),
+            new Event("2018-04-01", "14:00 - 16:00", "Event25", "MIFSAStudent2 Surname2"),
+            new Event("2018-04-01", "18:00 - 10:00", "Event29", "MIFSAStudent2 Surname2"),
+            new Event("2018-04-01", "10:00 - 13:00", "Event80", "Student1 Surname3"),
+            new Event("2018-04-01", "13:00 - 16:00", "Event85", "Student1 Surname3"),
+            new Event("2018-04-01", "8:00 - 12:00", "Event89", "Student1 Surname3"),
+            new Event("2018-04-01", "12:00 - 16:00", "Event90", "Student2 Surname4"),
+            new Event("2018-04-01", "16:00 - 20:00", "Event95", "Student2 Surname4"),
+            new Event("2018-04-01", "20:00 - 00:00", "Event99", "Student2 Surname4"),
+            new Event("2018-04-01", "10:00 - 12:00", "Event30", "Teacher1 Surname5"),
+            new Event("2018-04-01", "12:00 - 14:00", "Event40", "Teacher1 Surname5"),
+            new Event("2018-04-01", "10:00 - 12:00", "Event50", "Teacher2 Surname6"),
+            new Event("2018-04-01", "12:00 - 14:00", "Event60", "Teacher2 Surname6")
     ));
     List<Person> personDatabase = new ArrayList<Person>(Arrays.asList(
             new MIFSAStudent("MIFSAStudent1", "Surname1", "IT", 1),
@@ -26,7 +34,7 @@ public class Database {
             new Student("Student1", "Surname3", "IT", 2),
             new Student("Student2", "Surname4", "MED", 1),
             new Teacher("Teacher1", "Surname5"),
-            new Teacher("Teacher1", "Surname6")
+            new Teacher("Teacher2", "Surname6")
     ));
     
     public List getCommonEventsOfTheDay(String date) {
@@ -62,5 +70,8 @@ public class Database {
 */
     public List getPersonList() {
         return personDatabase;
+    }
+    public String getFirstPersonInTheList() {
+        return personDatabase.get(0).getName()+" "+personDatabase.get(0).getLastName();
     }
 }

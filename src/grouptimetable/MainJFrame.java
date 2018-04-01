@@ -27,7 +27,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class MainJFrame extends javax.swing.JFrame {
     public Database db = new Database();
-
+    public String personName;
     /**
      * Creates new form MainJFrame
      */
@@ -35,7 +35,8 @@ public class MainJFrame extends javax.swing.JFrame {
         initComponents();
         calendarPanel1.setSelectedDate(LocalDate.now());
         calendarPanel1.addCalendarListener(new SampleCalendarListener());
-        getTimetable(LocalDate.now().toString());
+        this.personName = db.getFirstPersonInTheList();
+        getTimetable(LocalDate.now().toString(), personName);
         getPersonList();
     }
 
@@ -201,7 +202,8 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         String selected = jList1.getSelectedValue();
-        System.out.println("jList1MouseClicked: "+selected);
+        this.personName = selected;
+        getTimetable(calendarPanel1.getSelectedDate().toString(), this.personName);
     }//GEN-LAST:event_jList1MouseClicked
     /* TO REMOVE */
     public void addItemToTimetable(Object[] item) {
@@ -232,7 +234,6 @@ public class MainJFrame extends javax.swing.JFrame {
         List<Person> personList = db.getPersonList();
         addPersonToPersonList(personList);
     }
-    
     public void clearTimetable() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
@@ -267,10 +268,9 @@ public class MainJFrame extends javax.swing.JFrame {
          *  Sorts the TimeTable with a custom comparator by the starting hour
          *  Adds sorted TimeTable to the jTable1 component
          */
-    public void getTimetable(String date) {
+    public void getTimetable(String date, String personName) {
         clearTimetable();
         List<Event> commonEventsOfTheDay = db.getCommonEventsOfTheDay(date);
-        String personName = "martynas";                                                                             // HARDCODED PERSON FOR NOW
         List<Event> personalEventsOfTheDay = db.getPersonalEventsOfTheDay(date, personName);
         List<Event> sortedTimetable = sortTimetableByEventStartTime(commonEventsOfTheDay, personalEventsOfTheDay);
         addEventsToTimetable(sortedTimetable);
@@ -292,7 +292,7 @@ public class MainJFrame extends javax.swing.JFrame {
         public void selectedDateChanged(CalendarSelectionEvent event) {
             LocalDate oldDate = event.getOldDate();
             LocalDate newDate = event.getNewDate();
-            getTimetable(newDate.toString());
+            getTimetable(newDate.toString(), personName);
         }
         @Override
         public void yearMonthChanged(YearMonthChangeEvent event) {
