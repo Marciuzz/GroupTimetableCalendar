@@ -186,6 +186,10 @@ public class MainJFrame extends javax.swing.JFrame {
             model.addRow(items[i]);
         }
     }
+    public void clearTimetable() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+    }
     public class SampleCalendarListener implements CalendarListener {
 
         /**
@@ -203,17 +207,11 @@ public class MainJFrame extends javax.swing.JFrame {
             LocalDate oldDate = event.getOldDate();
             LocalDate newDate = event.getNewDate();
             System.out.println("Date changed from "+oldDate.toString()+" to "+newDate.toString());
-            /*String oldDateString = PickerUtilities.localDateToString(oldDate, "(null)");
-            String newDateString = PickerUtilities.localDateToString(newDate, "(null)");
-            String messageStart = "\nIndependent Calendar Panel:";
-            String messagePartTwo = " The selected date has changed from '";
-            String fullMessage = messageStart + messagePartTwo
-                    + oldDateString + "' to '" + newDateString + "'. ";
-            fullMessage += (event.isDuplicate()) ? "(Event marked as duplicate.)" : "";
-            if (!panel.messageTextArea.getText().startsWith(messageStart)) {
-                panel.messageTextArea.setText("");
-            }
-            panel.messageTextArea.append(fullMessage);*/
+            clearTimetable();
+            addItem(new Object[]{"12:00 - 14:00", "Object-oriented programming in Java"});
+            
+            //Should be something like get persons events for that day
+            
         }
         @Override
         public void yearMonthChanged(YearMonthChangeEvent event) {
