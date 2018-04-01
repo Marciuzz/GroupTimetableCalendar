@@ -1,6 +1,9 @@
 package grouptimetable;
 
-public class Person {
+/**
+ * abstract class Person, so we can't create a Person object. It is just inherited by Teacher and Student
+ */
+abstract public class Person {
     String name;
     String lastName;
     

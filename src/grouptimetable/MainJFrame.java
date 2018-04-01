@@ -1,6 +1,10 @@
 package grouptimetable;
 
+import com.github.lgooddatepicker.optionalusertools.CalendarListener;
+import com.github.lgooddatepicker.zinternaltools.CalendarSelectionEvent;
+import com.github.lgooddatepicker.zinternaltools.YearMonthChangeEvent;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -22,13 +26,7 @@ public class MainJFrame extends javax.swing.JFrame {
     public MainJFrame() {
         initComponents();
         calendarPanel1.setSelectedDate(LocalDate.now());
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.addRow(new Object[]{"8:30 - 10:00", "Web Programming"});
-        model.addRow(new Object[]{"10:15 - 12:00", "Introduction to Python"});
-        model.addRow(new Object[]{"12:00 - 14:00", "Object-oriented programming in Java"});
-        model.addRow(new Object[]{"14:00 - 16:00", "Data structures"});
-        model.addRow(new Object[]{"16:00 - 18:00", "Human - Computer Interaction"});
-        model.addRow(new Object[]{"18:00 - 20:00", "Data storage"});
+        calendarPanel1.addCalendarListener(new SampleCalendarListener());
     }
 
     /**
@@ -174,10 +172,58 @@ public class MainJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel2PropertyChange
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
         System.out.println("Button1");
+        this.addItem( new Object[]{"8:30 - 10:00", "Web Programming"} );
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public void addItem(Object[] item) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.addRow(item);
+    }
+    public void addItems(Object[][] items) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        for (int i=0; i<items.length; i++) {
+            model.addRow(items[i]);
+        }
+    }
+    public class SampleCalendarListener implements CalendarListener {
+
+        /**
+         * selectedDateChanged, This function will be called each time that a date is selected in
+         * the independent CalendarPanel. The new and old selected dates are supplied in the event
+         * object. These parameters may contain null, which represents a cleared or empty date.
+         *
+         * By intention, this function will be called even if the user selects the same date value
+         * twice in a row. This is so that the programmer can catch all events of interest.
+         * Duplicate events can optionally be detected with the function
+         * CalendarSelectionEvent.isDuplicate().
+         */
+        @Override
+        public void selectedDateChanged(CalendarSelectionEvent event) {
+            LocalDate oldDate = event.getOldDate();
+            LocalDate newDate = event.getNewDate();
+            System.out.println("Date changed from "+oldDate.toString()+" to "+newDate.toString());
+            /*String oldDateString = PickerUtilities.localDateToString(oldDate, "(null)");
+            String newDateString = PickerUtilities.localDateToString(newDate, "(null)");
+            String messageStart = "\nIndependent Calendar Panel:";
+            String messagePartTwo = " The selected date has changed from '";
+            String fullMessage = messageStart + messagePartTwo
+                    + oldDateString + "' to '" + newDateString + "'. ";
+            fullMessage += (event.isDuplicate()) ? "(Event marked as duplicate.)" : "";
+            if (!panel.messageTextArea.getText().startsWith(messageStart)) {
+                panel.messageTextArea.setText("");
+            }
+            panel.messageTextArea.append(fullMessage);*/
+        }
+        @Override
+        public void yearMonthChanged(YearMonthChangeEvent event) {
+            /*YearMonth oldYearMonth = event.getOldYearMonth();
+            YearMonth newYearMonth = event.getNewYearMonth();
+            String oldYearMonthString = oldYearMonth.toString();
+            String newYearMonthString = newYearMonth.toString();
+            System.out.println(oldYearMonthString+" "+newYearMonthString);*/
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.github.lgooddatepicker.components.CalendarPanel calendarPanel1;
     private javax.swing.JButton jButton1;
