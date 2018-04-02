@@ -27,7 +27,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class MainJFrame extends javax.swing.JFrame {
     public Database db = new Database();
-    public String personName;
+    public String personListItem;
     /**
      * Creates new form MainJFrame
      */
@@ -35,8 +35,9 @@ public class MainJFrame extends javax.swing.JFrame {
         initComponents();
         calendarPanel1.setSelectedDate(LocalDate.now());
         calendarPanel1.addCalendarListener(new SampleCalendarListener());
-        this.personName = db.getFirstPersonInThePersonList();
-        getTimetable(LocalDate.now().toString(), personName);
+        //should return an object, so we can access name AND type (class name)
+        this.personListItem = db.getFirstPersonInThePersonList();
+        getTimetable(LocalDate.now().toString(), personListItem);
         getPersonList();
     }
 
@@ -201,15 +202,22 @@ public class MainJFrame extends javax.swing.JFrame {
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
         String selected = jList1.getSelectedValue();
-        this.personName = selected;
-        getTimetable(calendarPanel1.getSelectedDate().toString(), this.personName);
+        this.personListItem = selected;
+        getTimetable(calendarPanel1.getSelectedDate().toString(), this.personListItem);
     }//GEN-LAST:event_jList1MouseClicked
     
     public void addPersonToPersonList(List<Person> personList) {
         jList1.setModel(new DefaultListModel());
         DefaultListModel model = (DefaultListModel) jList1.getModel();
         for(Person p : personList){
-             model.addElement(p.getName()+" "+p.getLastName());
+            //check child classes here, MIFSAStudent is also a Student, so check first
+            if (p instanceof Teacher) {
+                model.addElement(p.getName()+" "+p.getLastName()+" [T]");
+            } else if (p instanceof MIFSAStudent) {
+                model.addElement(p.getName()+" "+p.getLastName()+" [SA]");
+            } else if (p instanceof Student) {
+                model.addElement(p.getName()+" "+p.getLastName()+" [S]");
+            } 
         }    
         jList1.setModel(model);     
         jList1.setSelectedIndex(0);
@@ -235,29 +243,26 @@ public class MainJFrame extends javax.swing.JFrame {
     public List<Event> sortTimetableByEventStartTime(List<Event> list1, List<Event> list2) {
         list1.addAll(list2);
         Collections.sort(list1, new CustomComparator());
-        //Collections.sort(list1);
-        /*for (int i=0; i<list1.size(); i++) {
-            Event temp = list1.get(i);
-            int hour = Integer.parseInt(temp.getEventHourTime().substring(0,2));
-            sortedTimetable.add(temp, hour);
-            System.out.println(temp.getEventHourTime().substring(0,2));
-        }*/
         return list1;
     }
-        /**
-         * getTimetable method steps:
-         *  It clears the TimeTable
-         *  Gets the common events of the day list of events
-         *  Gets the personal events of the day list of events
-         *  Sorts the TimeTable with a custom comparator by the starting hour
-         *  Adds sorted TimeTable to the jTable1 component
-         */
-    public void getTimetable(String date, String personName) {
+    public void getTimetable(String date, String personListItem) {
+        //get Person's class from [ ] and add it to the personList, get the name from the personListItem
+        String personType = personListItem.substring(personListItem.indexOf("[") + 1, personListItem.indexOf("]"));
+        String personName = personListItem.substring(0, personListItem.indexOf("[")-1);
         clearTimetable();
         List<Event> commonEventsOfTheDay = db.getCommonEventsOfTheDay(date);
         List<Event> personalEventsOfTheDay = db.getPersonalEventsOfTheDay(date, personName);
-        List<Event> sortedTimetable = sortTimetableByEventStartTime(commonEventsOfTheDay, personalEventsOfTheDay);
-        addEventsToTimetable(sortedTimetable);
+        //We can re-use a getPersonalEventsOfTheDay method in the Database class, and send a "SA" flag, so we can retrieve all mifsa events if it is a MIFSAStudent
+                
+        if (personType.equals("SA")){
+            List<Event> sortedTimetable = sortTimetableByEventStartTime(commonEventsOfTheDay, personalEventsOfTheDay);
+            List<Event> mifsaEventsOfTheDay = db.getPersonalEventsOfTheDay(date, personType);
+            List<Event> sortedTimetable2 = sortTimetableByEventStartTime(mifsaEventsOfTheDay, sortedTimetable);
+            addEventsToTimetable(sortedTimetable2);
+        } else {
+            List<Event> sortedTimetable = sortTimetableByEventStartTime(commonEventsOfTheDay, personalEventsOfTheDay);
+            addEventsToTimetable(sortedTimetable);
+        }
     }
     
     public class SampleCalendarListener implements CalendarListener {
@@ -276,7 +281,7 @@ public class MainJFrame extends javax.swing.JFrame {
         public void selectedDateChanged(CalendarSelectionEvent event) {
             LocalDate oldDate = event.getOldDate();
             LocalDate newDate = event.getNewDate();
-            getTimetable(newDate.toString(), personName);
+            getTimetable(newDate.toString(), personListItem);
         }
         @Override
         public void yearMonthChanged(YearMonthChangeEvent event) {

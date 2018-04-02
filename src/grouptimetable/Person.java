@@ -6,6 +6,7 @@ package grouptimetable;
 abstract public class Person {
     String name;
     String lastName;
+    boolean isMIFSAstudent = false;
     
     public Person(String name, String lastName) {
         this.name = name;

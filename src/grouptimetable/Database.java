@@ -10,8 +10,17 @@ import java.util.Date;
 public class Database {
     //Initialization using Arrays.asList, imitates having predefined data e.g. in file system
     List<Event> eventsDatabase = new ArrayList<Event>(Arrays.asList(
+            //String eventDate, String eventHourTime, String eventName, String eventType [personName/common/SA]
             new Event("2018-04-01", "10:00 - 12:00", "Event10", "MIFSAStudent1 Surname1"),
             new Event("2018-04-01", "12:00 - 13:00", "Event15", "MIFSAStudent1 Surname1"),
+            new Event("2018-04-01", "10:00 - 12:00", "MIFSAEvent13", "SA"),
+            new Event("2018-04-01", "12:00 - 13:00", "MIFSAEvent26", "SA"),
+            new Event("2018-04-02", "10:00 - 12:00", "MIFSAEvent13", "SA"),
+            new Event("2018-04-02", "12:00 - 13:00", "MIFSAEvent26", "SA"),
+            new Event("2018-04-02", "12:00 - 13:00", "Event100", "MIFSAStudent1 Surname1"),
+            new Event("2018-04-02", "10:00 - 12:00", "Event150", "MIFSAStudent1 Surname1"),
+            new Event("2018-04-01", "10:00 - 12:00", "CommonEvent999", "common"),
+            new Event("2018-04-02", "12:00 - 18:00", "CommonEvent111", "common"),
             new Event("2018-04-01", "16:00 - 18:00", "Event19", "MIFSAStudent1 Surname1"),
             new Event("2018-04-01", "12:00 - 14:00", "Event20", "MIFSAStudent2 Surname2"),
             new Event("2018-04-01", "14:00 - 16:00", "Event25", "MIFSAStudent2 Surname2"),
@@ -63,6 +72,15 @@ public class Database {
         return personDatabase;
     }
     public String getFirstPersonInThePersonList() {
-        return personDatabase.get(0).getName()+" "+personDatabase.get(0).getLastName();
+        String personType = new String();
+        //check child classes here, MIFSAStudent is also a Student, so check first
+        if (personDatabase.get(0) instanceof Teacher) {
+            personType = " [T]";
+        } else if (personDatabase.get(0) instanceof MIFSAStudent) {
+            personType = " [SA]";
+        } else if (personDatabase.get(0) instanceof Student) {
+            personType = " [S]";
+        } 
+        return personDatabase.get(0).getName()+" "+personDatabase.get(0).getLastName()+personType;
     }
 }
