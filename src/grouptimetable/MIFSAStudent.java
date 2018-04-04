@@ -1,14 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package grouptimetable;
 
-/**
- *
- * @author martynas
- */
-public class MIFSAStudent {
+public class MIFSAStudent extends Student {
     
+    public MIFSAStudent(String name, String lastName, String typeOfStudy, int yearOfStudy) {
+        super(name, lastName, typeOfStudy, yearOfStudy);
+        boolean isMIFSAstudent = true;
+        this.setPersonType("MIFSAStudent");
+    }
+    
+    public void setValues(String name, String lastName, String typeOfStudy, int yearOfStudy) {
+        super.setValues(name, lastName, typeOfStudy, yearOfStudy);
+        boolean isMIFSAstudent = true;
+        this.setPersonType("MIFSAStudent");
+    }
 }

@@ -1,58 +1,38 @@
 package grouptimetable;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- *
- * @author martynas
+ * abstract class Person, so we can't create a Person object. It is just inherited by Teacher and Student
  */
-public class Person {
-    String Vardas[] = new String[100];
-    String Pavarde[] = new String[100];
-    String Pareigos[] = new String[100];
-    String SarasoNr[] = new String[100];
-    String Studijos[] = new String[100];
-    int Kursas[] = new int[100];
+abstract public class Person {
+    String name;
+    String lastName;
+    boolean isMIFSAstudent = false;
     
-    public void setVardas(String name, int index){
-        Vardas[index] = name;
+    public Person(String name, String lastName) {
+        this.name = name;
+        this.lastName = lastName;
     }
-    public void setPavarde(String name, int index){
-        Pavarde[index] = name;
-    }
-    public void setPareigos(String name, int index){
-        Pareigos[index] = name;
-    }
-    public void setSarasoNr(String name, int index){
-        SarasoNr[index] = name;
-    }
-    public void setStudijos(String name, int index){
-        Studijos[index] = name;
-    }
-    public void setKursas(int number, int index){
-        Kursas[index] = number;
+    void setValues(String name, String lastName) {
+        this.name = name;
+        this.lastName = lastName;
     }
     
-    public String getVardas(int index){
-        return Vardas[index];
+    public void setName(String name){
+        this.name = name;
     }
-    public String getPavarde(int index){
-        return Pavarde[index];
+    public void setLastName(String lastName){
+        lastName = name;
     }
-    public String getPareigos(int index){
-        return Pareigos[index];
+    
+    
+    public String getValues() {
+        return name+" "+lastName;
     }
-    public String getSarasoNr(int index){
-        return SarasoNr[index];
+    
+    public String getName(){
+        return name;
     }
-    public String getStudijos(int index){
-        return Studijos[index];
-    }
-    public int getKursas(int index){
-        return Kursas[index];
+    public String getLastName(){
+        return lastName;
     }
 }
