@@ -15,16 +15,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.apache.commons.lang3.StringUtils;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- *
- * @author martynas
- */
 public class MainJFrame extends javax.swing.JFrame {
     public Database db = new Database();
     public String personListItem;
@@ -40,7 +30,7 @@ public class MainJFrame extends javax.swing.JFrame {
         getTimetable(LocalDate.now().toString(), personListItem);
         getPersonList();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -57,6 +47,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
+        datePicker1 = new com.github.lgooddatepicker.components.DatePicker();
         calendarPanel1 = new com.github.lgooddatepicker.components.CalendarPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
@@ -64,7 +55,7 @@ public class MainJFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GroupTimetableProject");
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Create Event");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -72,7 +63,6 @@ public class MainJFrame extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Lucida Sans", 1, 24)); // NOI18N
-        jLabel1.setText("Date here");
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, calendarPanel1, org.jdesktop.beansbinding.ELProperty.create("${selectedDate.year}-${selectedDate.monthValue}-${selectedDate.dayOfMonth}"), jLabel1, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("Select a date");
@@ -97,7 +87,6 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Lucida Sans", 1, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel2.setText("Day of week");
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, calendarPanel1, org.jdesktop.beansbinding.ELProperty.create("${selectedDate.dayOfWeek.value}"), jLabel2, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -119,23 +108,27 @@ public class MainJFrame extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 910, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
-                        .addGap(100, 100, 100)
-                        .addComponent(jButton1)
-                        .addGap(511, 511, 511))))
+                        .addGap(708, 708, 708))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2))
+                    .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addGap(35, 35, 35)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -197,7 +190,8 @@ public class MainJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel2PropertyChange
     /* TO REMOVE */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        System.out.println("Button1");
+        NewEventJFrame newEvent = new NewEventJFrame();
+        newEvent.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
@@ -300,6 +294,7 @@ public class MainJFrame extends javax.swing.JFrame {
 }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.github.lgooddatepicker.components.CalendarPanel calendarPanel1;
+    private com.github.lgooddatepicker.components.DatePicker datePicker1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

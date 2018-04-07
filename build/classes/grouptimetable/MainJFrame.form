@@ -63,12 +63,14 @@
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
+                          <Component id="datePicker1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jButton1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel1" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
-                          <Component id="jButton1" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="511" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="708" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -78,13 +80,16 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel1" alignment="3" min="-2" pref="57" max="-2" attributes="0"/>
-                      <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jLabel1" alignment="3" min="-2" pref="57" max="-2" attributes="0"/>
+                          <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="datePicker1" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="jButton1" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jScrollPane1" pref="554" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" pref="525" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -93,7 +98,7 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="jButton1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="jButton1"/>
+            <Property name="text" type="java.lang.String" value="Create Event"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
@@ -104,7 +109,6 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Lucida Sans" size="24" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Date here"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="text" source="calendarPanel1" sourcePath="${selectedDate.year}-${selectedDate.monthValue}-${selectedDate.dayOfMonth}" target="jLabel1" targetPath="text" updateStrategy="0" immediately="false">
@@ -156,7 +160,6 @@
               <Font name="Lucida Sans" size="24" style="1"/>
             </Property>
             <Property name="horizontalAlignment" type="int" value="11"/>
-            <Property name="text" type="java.lang.String" value="Day of week"/>
           </Properties>
           <BindingProperties>
             <BindingProperty name="text" source="calendarPanel1" sourcePath="${selectedDate.dayOfWeek.value}" target="jLabel2" targetPath="text" updateStrategy="0" immediately="false"/>
@@ -164,6 +167,8 @@
           <Events>
             <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="jLabel2PropertyChange"/>
           </Events>
+        </Component>
+        <Component class="com.github.lgooddatepicker.components.DatePicker" name="datePicker1">
         </Component>
       </SubComponents>
     </Container>

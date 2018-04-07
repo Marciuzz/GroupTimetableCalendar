@@ -2,7 +2,7 @@
 	Final program:
 
 		*Database can store timetables of multiple persons. (Manual or automatic input can be chosen by user)
-		*User can log in to see his personal timetable.
+		*User can be switched to see his personal timetable.
 		*Personal timetables will be graphically presented for user.
 		*User can change date at any time.
 		*User can check events on different dates.
