@@ -196,6 +196,23 @@ public class MainJFrame extends javax.swing.JFrame {
         NewEventJFrame newEvent = new NewEventJFrame();
         newEvent.setLocationRelativeTo(null);
         newEvent.setVisible(true);
+        newEvent.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                if (newEvent.eventDate != null && newEvent.eventName != null && newEvent.eventHourTime != null && newEvent.eventType != null) {
+                    if (newEvent.eventType.equals("personal")) {
+                        String personName = personListItem.substring(0, personListItem.indexOf("[")-1);
+                        Event newEvt = new Event(newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,personName);
+                        db.addItemToEventsDatabase(newEvt);
+                    } else {
+                        Event newEvt = new Event(newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,newEvent.eventType);
+                        db.addItemToEventsDatabase(newEvt);
+                    }
+                    //refresh timetable after an event is created
+                    getTimetable(LocalDate.now().toString(), personListItem);
+                }
+            }
+        });
     }//GEN-LAST:event_jButton1ActionPerformed
     
     public void addPersonToPersonList(List<Person> personList) {
