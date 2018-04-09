@@ -14,6 +14,7 @@ import static javax.swing.text.html.HTML.Tag.HEAD;
 public class MainJFrame extends javax.swing.JFrame {
     public Database db = new Database();
     public String personListItem;
+    
     /**
      * Creates new form MainJFrame
      */
