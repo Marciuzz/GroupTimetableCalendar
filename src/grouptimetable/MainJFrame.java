@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 public class MainJFrame extends javax.swing.JFrame {
     public Database db = new Database();
     public String personListItem;
+    
     /**
      * Creates new form MainJFrame
      */
