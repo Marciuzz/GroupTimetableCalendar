@@ -26,6 +26,8 @@ public class MainJFrame extends javax.swing.JFrame {
         this.personListItem = db.getFirstPersonInThePersonList();
         getTimetable(LocalDate.now().toString(), personListItem);
         getPersonList();
+        //setting default current time to now
+        datePicker1.setDate(LocalDate.now());
     }
     
     /**
@@ -44,6 +46,8 @@ public class MainJFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
+        datePicker1 = new com.github.lgooddatepicker.components.DatePicker();
+        jLabel3 = new javax.swing.JLabel();
         calendarPanel1 = new com.github.lgooddatepicker.components.CalendarPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
@@ -61,7 +65,6 @@ public class MainJFrame extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Lucida Sans", 1, 24)); // NOI18N
-        jLabel1.setText("Date here");
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, calendarPanel1, org.jdesktop.beansbinding.ELProperty.create("${selectedDate.year}-${selectedDate.monthValue}-${selectedDate.dayOfMonth}"), jLabel1, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceNullValue("Select a date");
@@ -86,7 +89,6 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Lucida Sans", 1, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel2.setText("Day of week");
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, calendarPanel1, org.jdesktop.beansbinding.ELProperty.create("${selectedDate.dayOfWeek.value}"), jLabel2, org.jdesktop.beansbinding.BeanProperty.create("text"));
         bindingGroup.addBinding(binding);
@@ -96,6 +98,8 @@ public class MainJFrame extends javax.swing.JFrame {
                 jLabel2PropertyChange(evt);
             }
         });
+
+        jLabel3.setText("Current date:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -113,7 +117,11 @@ public class MainJFrame extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addGap(67, 67, 67)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(605, 605, 605))))
+                        .addGap(155, 155, 155)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(242, 242, 242))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,7 +130,9 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
                 .addGap(35, 35, 35)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
                 .addContainerGap())
@@ -200,16 +210,22 @@ public class MainJFrame extends javax.swing.JFrame {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 if (newEvent.eventDate != null && newEvent.eventName != null && newEvent.eventHourTime != null && newEvent.eventType != null) {
-                    if (newEvent.eventType.equals("personal")) {
-                        String personName = personListItem.substring(0, personListItem.indexOf("[")-1);
-                        Event newEvt = new Event(newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,personName);
-                        db.addItemToEventsDatabase(newEvt);
+                    if (newEvent.eventDate.compareTo(datePicker1.getDate().toString()) <=0 ){
+                        if (newEvent.eventType.equals("personal")) {
+                            String personName = personListItem.substring(0, personListItem.indexOf("[")-1);
+                            Event newEvt = new Event(newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,personName);
+                            db.addItemToEventsDatabase(newEvt);
+                        } else {
+                            Event newEvt = new Event(newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,newEvent.eventType);
+                            db.addItemToEventsDatabase(newEvt);
+                        }
+                        //refresh timetable after an event is created
+                        getTimetable(LocalDate.now().toString(), personListItem);
                     } else {
-                        Event newEvt = new Event(newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,newEvent.eventType);
-                        db.addItemToEventsDatabase(newEvt);
+                        System.out.println("Event was not created - date is already in the past");
                     }
-                    //refresh timetable after an event is created
-                    getTimetable(LocalDate.now().toString(), personListItem);
+                } else {
+                    System.out.println("Event was not created - please fill all the fields");
                 }
             }
         });
@@ -309,9 +325,11 @@ public class MainJFrame extends javax.swing.JFrame {
 }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.github.lgooddatepicker.components.CalendarPanel calendarPanel1;
+    private com.github.lgooddatepicker.components.DatePicker datePicker1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
