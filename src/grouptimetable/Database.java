@@ -83,4 +83,8 @@ public class Database {
         } 
         return personDatabase.get(0).getName()+" "+personDatabase.get(0).getLastName()+personType;
     }
+    
+    public void addItemToEventsDatabase(Event evt) {
+        eventsDatabase.add(evt);
+    }
 }
