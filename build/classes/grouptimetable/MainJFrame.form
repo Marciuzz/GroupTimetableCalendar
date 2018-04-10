@@ -74,13 +74,8 @@
                           <EmptySpace min="-2" pref="155" max="-2" attributes="0"/>
                           <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-<<<<<<< HEAD
-                          <Component id="datePicker1" min="-2" pref="161" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="242" max="-2" attributes="0"/>
-=======
                           <Component id="datePicker1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="209" max="-2" attributes="0"/>
->>>>>>> HenrikasR-master
                       </Group>
                   </Group>
               </Group>

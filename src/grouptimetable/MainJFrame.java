@@ -120,13 +120,8 @@ public class MainJFrame extends javax.swing.JFrame {
                         .addGap(155, 155, 155)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-<<<<<<< HEAD
-                        .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(242, 242, 242))))
-=======
                         .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(209, 209, 209))))
->>>>>>> HenrikasR-master
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -215,7 +210,8 @@ public class MainJFrame extends javax.swing.JFrame {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 if (newEvent.eventDate != null && newEvent.eventName != null && newEvent.eventHourTime != null && newEvent.eventType != null) {
-                    if (newEvent.eventDate.compareTo(datePicker1.getDate().toString()) <=0 ){
+                    //check if new event date is after todays date
+                    if (newEvent.eventDate.compareTo(datePicker1.getDate().toString()) >=0 ){
                         if (newEvent.eventType.equals("personal")) {
                             String personName = personListItem.substring(0, personListItem.indexOf("[")-1);
                             Event newEvt = new Event(newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,personName);
