@@ -87,4 +87,13 @@ public class Database {
     public void addItemToEventsDatabase(Event evt) {
         eventsDatabase.add(evt);
     }
+    public void addMIFSAToPersonsDatabase(MIFSAStudent mfs){
+        personDatabase.add(mfs);
+    }
+    public void addStudentToPersonsDatabase(Student std){
+        personDatabase.add(std);
+    }
+    public void addTeacherToPersonsDatabase(Teacher tth){
+        personDatabase.add(tth);
+    }
 }
