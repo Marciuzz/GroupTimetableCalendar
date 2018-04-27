@@ -5,17 +5,23 @@ import java.time.LocalDate;
 import java.util.Date;
 
 public class Event { 
+    String eventId;
     String eventDate;
     String eventHourTime;
     String eventName;
     String eventType;
     
     //Event constructor
-    public Event(String date, String hourTime, String eventName, String eventType) {
+    public Event(String eventId, String date, String hourTime, String eventName, String eventType) {
+        this.eventId = eventId;
         this.eventDate = date;
         this.eventHourTime = hourTime;
         this.eventName = eventName;
         this.eventType = eventType;
+    }
+    
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
     
     public void setEventDate(String date) {
@@ -31,6 +37,9 @@ public class Event {
         this.eventType = eventType;
     }
     
+    public String getEventId() {
+        return eventId;
+    }
     public String getEventDate() {
         return eventDate;
     }

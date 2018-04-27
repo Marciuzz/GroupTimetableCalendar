@@ -10,14 +10,14 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Student extends Person {
     String personType;        // teacher, student, MIFSAStudent
-    String typeOfStudy; // IT, Law, Economics
+    String facultyName; // IT, MED, LAW, ECO
     int yearOfStudy;    // 1, 2, 3, 4
     boolean isMIFSAstudent = false;
     
-    public Student(String name, String lastName, String typeOfStudy, int yearOfStudy) {
+    public Student(String name, String lastName, String facultyName, int yearOfStudy) {
         super(name, lastName);
         this.setPersonType("Student");
-        this.setTypeOfStudy(typeOfStudy);
+        this.setFacultyName(facultyName);
         this.setYearOfStudy(yearOfStudy);
     }
     
@@ -25,7 +25,7 @@ public class Student extends Person {
     public void setValues(String name, String lastName, String typeOfStudy, int yearOfStudy) {
         super.setValues(name, lastName);
         this.setPersonType("Student");
-        this.setTypeOfStudy(typeOfStudy);
+        this.setFacultyName(facultyName);
         this.setYearOfStudy(yearOfStudy);
     }
     //setValues overloading
@@ -36,11 +36,11 @@ public class Student extends Person {
     public void setPersonType(String personType){
             this.personType = personType;
     }
-    public void setTypeOfStudy(String typeOfStudy){
-        if (StringUtils.isEmpty(typeOfStudy)) {
-            System.out.println("Please set the type of study");
+    public void setFacultyName(String facultyName){
+        if (StringUtils.isEmpty(facultyName) && facultyName.length()==3) {
+            System.out.println("Please set correct faculty abbreviation (Must be 3 letters)!");
         } else {
-            this.typeOfStudy = typeOfStudy;
+            this.facultyName = facultyName;
         }
     }
     public void setYearOfStudy(int yearOfStudy){
@@ -48,13 +48,13 @@ public class Student extends Person {
     }
     
     public String getValues() {
-        return name+" "+lastName+" "+personType+" "+typeOfStudy+" "+yearOfStudy;
+        return name+" "+lastName+" "+personType+" "+facultyName+" "+yearOfStudy;
     }
     public String getPersonType(){
         return personType;
     }
-    public String getTypeOfStudy(){
-        return typeOfStudy;
+    public String getFacultyName(){
+        return facultyName;
     }
     public int getYearOfStudy(){
         return yearOfStudy;

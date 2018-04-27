@@ -1,15 +1,24 @@
 package grouptimetable;
 
 import com.github.lgooddatepicker.optionalusertools.CalendarListener;
+import com.github.lgooddatepicker.optionalusertools.DateChangeListener;
 import com.github.lgooddatepicker.zinternaltools.CalendarSelectionEvent;
+import com.github.lgooddatepicker.zinternaltools.DateChangeEvent;
 import com.github.lgooddatepicker.zinternaltools.YearMonthChangeEvent;
+import java.awt.Component;
+
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import static javax.swing.text.html.HTML.Tag.HEAD;
+import javax.swing.table.TableCellRenderer;
 
 public class MainJFrame extends javax.swing.JFrame {
     public Database db = new Database();
@@ -28,6 +37,7 @@ public class MainJFrame extends javax.swing.JFrame {
         getPersonList();
         //setting default current time to now
         datePicker1.setDate(LocalDate.now());
+        datePicker1.addDateChangeListener(new SampleDateChangeListener());
     }
     
     /**
@@ -46,11 +56,12 @@ public class MainJFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        datePicker1 = new com.github.lgooddatepicker.components.DatePicker();
-        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         calendarPanel1 = new com.github.lgooddatepicker.components.CalendarPanel();
+        datePicker1 = new com.github.lgooddatepicker.components.DatePicker();
         jScrollPane2 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("GroupTimetableProject");
@@ -72,19 +83,38 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null}
             },
             new String [] {
-                "Time", "Subject"
+                "Time", "Subject", "Delete", "ID"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jTable1.setFocusable(false);
         jTable1.setRowHeight(32);
+        jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setResizable(false);
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(100);
-            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(0).setMinWidth(100);
+            jTable1.getColumnModel().getColumn(0).setMaxWidth(100);
+            jTable1.getColumnModel().getColumn(2).setMaxWidth(50);
+            jTable1.getColumnModel().getColumn(3).setMinWidth(0);
+            jTable1.getColumnModel().getColumn(3).setMaxWidth(0);
         }
 
         jLabel2.setFont(new java.awt.Font("Lucida Sans", 1, 24)); // NOI18N
@@ -99,7 +129,8 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Current date:");
+        jLabel4.setFont(new java.awt.Font("Tahoma", 2, 11)); // NOI18N
+        jLabel4.setText("You can manually set today's date on the right to simulate custom current time and test the program. Then you can select a date in the calendar like in usual timetables.");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -117,11 +148,10 @@ public class MainJFrame extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addGap(67, 67, 67)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(155, 155, 155)
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(209, 209, 209))))
+                        .addGap(579, 579, 579))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,10 +160,10 @@ public class MainJFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(35, 35, 35)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -145,26 +175,35 @@ public class MainJFrame extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jList1);
 
+        jLabel3.setText("Today is:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 925, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(calendarPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(datePicker1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(calendarPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(calendarPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(datePicker1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2)
                 .addContainerGap())
         );
@@ -214,10 +253,10 @@ public class MainJFrame extends javax.swing.JFrame {
                     if (newEvent.eventDate.compareTo(datePicker1.getDate().toString()) >=0 ){
                         if (newEvent.eventType.equals("personal")) {
                             String personName = personListItem.substring(0, personListItem.indexOf("[")-1);
-                            Event newEvt = new Event(newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,personName);
+                            Event newEvt = new Event(String.valueOf(db.getEventCount()),newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,personName);
                             db.addItemToEventsDatabase(newEvt);
                         } else {
-                            Event newEvt = new Event(newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,newEvent.eventType);
+                            Event newEvt = new Event(String.valueOf(db.getEventCount()),newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,newEvent.eventType);
                             db.addItemToEventsDatabase(newEvt);
                         }
                         //refresh timetable after an event is created
@@ -231,6 +270,22 @@ public class MainJFrame extends javax.swing.JFrame {
             }
         });
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // Delete event from database
+        int col = jTable1.columnAtPoint(evt.getPoint());
+        int row = jTable1.getSelectedRow();
+        if (col==2){
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to delete this event?","Warning",dialogButton);
+                if(dialogResult == JOptionPane.YES_OPTION){
+                    //3rd column is ID (hidden)
+                    String value = jTable1.getModel().getValueAt(row, 3).toString();
+                    db.removeItemFromDatabase(value);
+                    getTimetable(calendarPanel1.getSelectedDate().toString(), personListItem);
+                }
+            }
+    }//GEN-LAST:event_jTable1MouseClicked
     
     public void addPersonToPersonList(List<Person> personList) {
         jList1.setModel(new DefaultListModel());
@@ -238,11 +293,11 @@ public class MainJFrame extends javax.swing.JFrame {
         for(Person p : personList){
             //check child classes here, MIFSAStudent is also a Student, so check first
             if (p instanceof Teacher) {
-                model.addElement(p.getName()+" "+p.getLastName()+" [T]");
+                model.addElement(p.getName()+" "+p.getLastName()+" [TE]");
             } else if (p instanceof MIFSAStudent) {
                 model.addElement(p.getName()+" "+p.getLastName()+" [SA]");
             } else if (p instanceof Student) {
-                model.addElement(p.getName()+" "+p.getLastName()+" [S]");
+                model.addElement(p.getName()+" "+p.getLastName()+" [ST]");
             } 
         }    
         jList1.setModel(model);     
@@ -258,10 +313,25 @@ public class MainJFrame extends javax.swing.JFrame {
     }
     public void addEventsToTimetable(List<Event> eventList) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        //center labels
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        /////////////////
+        TableCellRenderer buttonRenderer = new JTableButtonRenderer();
+        for (int i=0; i<jTable1.getColumnCount(); i++){
+            
+            /////////////////////////////////////////
+            if (i==2) {
+                jTable1.getColumnModel().getColumn(i).setCellRenderer(buttonRenderer); 
+            } else {
+                jTable1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            }
+        }
         for (int i = 0; i < eventList.size(); i++) {
             if(eventList.get(i) != null) {
                 Event temp = eventList.get(i);
-                Object[] obj = new Object[]{temp.getEventHourTime(), temp.getEventName()};
+                JButton jb = new JButton("X");
+                Object[] obj = new Object[]{temp.getEventHourTime(), temp.getEventName(), jb, eventList.get(i).eventId};
                 model.addRow(obj);
             }     
 	}
@@ -290,7 +360,16 @@ public class MainJFrame extends javax.swing.JFrame {
             addEventsToTimetable(sortedTimetable);
         }
     }
-    
+    public class SampleDateChangeListener implements DateChangeListener {
+        /**
+         * @param event has all info from event
+         * we get date from date picker and set todays date as selectedDate in main CalendarPanel
+         */
+        @Override
+        public void dateChanged(DateChangeEvent event) {
+            calendarPanel1.setSelectedDate(datePicker1.getDate());
+        }
+    }
     public class SampleCalendarListener implements CalendarListener {
 
         /**
@@ -323,6 +402,13 @@ public class MainJFrame extends javax.swing.JFrame {
     public int compare(Event e1, Event e2) {
         return e1.getEventHourTime().compareTo(e2.getEventHourTime());
     }
+    }
+    public class JTableButtonRenderer implements TableCellRenderer {        
+    @Override 
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        JButton button = (JButton)value;
+        return button;  
+    }
 }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.github.lgooddatepicker.components.CalendarPanel calendarPanel1;
@@ -331,6 +417,7 @@ public class MainJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JList<String> jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
