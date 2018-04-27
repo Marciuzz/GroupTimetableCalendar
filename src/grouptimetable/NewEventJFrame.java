@@ -1,7 +1,5 @@
 package grouptimetable;
 
-import com.github.lgooddatepicker.optionalusertools.TimeChangeListener;
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.time.LocalDate;
@@ -9,16 +7,22 @@ import java.time.LocalDate;
 
 
 public class NewEventJFrame extends javax.swing.JFrame {
+    
+    String currentDate;
     String eventDate;
     String eventHourTime;
     String eventName;
     String eventType;
     
+    private void getCurrentDate(){
+        MainJFrame MJFObject = new MainJFrame();
+        this.currentDate = MJFObject.currentDate;
+    }
+    
     public NewEventJFrame() {
         initComponents();
         datePicker1.setDate(LocalDate.now());
     }
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -152,7 +156,18 @@ public class NewEventJFrame extends javax.swing.JFrame {
          * String eventDate, String eventHourTime, String eventName, String eventType [personName/common/SA]
          * new Event("2018-04-01", "10:00 - 12:00", "Event10", "MIFSAStudent1 Surname1"),
          */
+        
         eventDate = datePicker1.getDate().toString();
+        getCurrentDate();
+        
+        if (Integer.parseInt(currentDate.replaceAll("-", "")) > Integer.parseInt(eventDate.replaceAll("-", ""))){
+            JOptionPane.showMessageDialog(null, "Please change date. You can't create new events in the past");
+        }
+        if (jTextField2.getText().equals("") || jTextField1.getText().equals("") || jTextField4.getText().equals("")){
+            JOptionPane.showMessageDialog(null, "Please enter all required data");
+        }
+        else{
+          
         eventHourTime = jTextField2.getText()+"-"+jTextField4.getText();
         eventName = jTextField1.getText();
         if(jRadioButton1.isSelected()) {
@@ -164,8 +179,9 @@ public class NewEventJFrame extends javax.swing.JFrame {
         }
         //closes window and dispatches an event on button click
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
- 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private com.github.lgooddatepicker.components.DatePicker datePicker1;

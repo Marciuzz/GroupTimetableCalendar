@@ -74,10 +74,11 @@ public class Database {
         }
         return eventsToReturn;
     }
-
+    
     public List getPersonList() {
         return personDatabase;
     }
+    
     public String getFirstPersonInThePersonList() {
         String personType = new String();
         //check child classes here, MIFSAStudent is also a Student, so check first
@@ -105,5 +106,17 @@ public class Database {
     
     public int getEventCount() {
         return eventsDatabase.size();
+    }
+    
+    public void addMIFSAToPersonsDatabase(MIFSAStudent mfs){
+        personDatabase.add(mfs);
+    }
+    
+    public void addStudentToPersonsDatabase(Student std){
+        personDatabase.add(std);
+    }
+    
+    public void addTeacherToPersonsDatabase(Teacher tth){
+        personDatabase.add(tth);
     }
 }
