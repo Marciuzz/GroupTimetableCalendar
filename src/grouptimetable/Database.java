@@ -10,7 +10,7 @@ import java.util.Date;
 public class Database {
     //Initialization using Arrays.asList, imitates having predefined data e.g. in file system
     List<Event> eventsDatabase = new ArrayList<Event>(Arrays.asList(
-            //String eventId, String eventDate, String eventHourTime, String eventName, String eventType [personName/common/SA]
+            //String eventId, String eventDate, String eventHourTime, String eventName, String eventType [personName/common/SA/facultyName]
             new Event("0", "2018-04-01", "10:00 - 12:00", "Event10", "MIFSAStudent1 Surname1"),
             new Event("1", "2018-04-01", "12:00 - 13:00", "Event15", "MIFSAStudent1 Surname1"),
             new Event("2", "2018-04-01", "10:00 - 12:00", "MIFSAEvent13", "SA"),
@@ -34,7 +34,13 @@ public class Database {
             new Event("20", "2018-04-01", "10:00 - 12:00", "Event30", "Teacher1 Surname5"),
             new Event("21", "2018-04-01", "12:00 - 14:00", "Event40", "Teacher1 Surname5"),
             new Event("22", "2018-04-01", "10:00 - 12:00", "Event50", "Teacher2 Surname6"),
-            new Event("23", "2018-04-01", "12:00 - 14:00", "Event60", "Teacher2 Surname6")
+            new Event("23", "2018-04-01", "12:00 - 14:00", "Event60", "Teacher2 Surname6"),
+            new Event("24", "2018-04-01", "12:00 - 14:00", "Event300", "MIF"),
+            new Event("25", "2018-04-01", "13:00 - 15:00", "Event400", "MIF"),
+            new Event("26", "2018-04-01", "14:00 - 16:00", "Event500", "MIF"),
+            new Event("27", "2018-04-01", "12:00 - 14:00", "Event600", "MED"),
+            new Event("28", "2018-04-01", "13:00 - 15:00", "Event700", "MED"),
+            new Event("29", "2018-04-01", "14:00 - 16:00", "Event800", "MED")
     ));
     List<Person> personDatabase = new ArrayList<Person>(Arrays.asList(
             //String name, String lastName, String typeOfStudy, int yearOfStudy
@@ -52,22 +58,11 @@ public class Database {
             new Teacher("Teacher2", "Surname2", "MED")
     ));
     
-    public List getCommonEventsOfTheDay(String date) {
+    public List getEvents(String date, String filter) {
         List<Event> eventsToReturn = new ArrayList<Event>();
         for (int i=0; i<eventsDatabase.size(); i++) {
             if (eventsDatabase.get(i).getEventDate().equals(date)) {
-                if (eventsDatabase.get(i).getEventType().equals("common")){
-                    eventsToReturn.add(eventsDatabase.get(i));
-                }
-            }
-        }
-        return eventsToReturn;
-    }
-    public List getPersonalEventsOfTheDay(String date, String name) {
-        List<Event> eventsToReturn = new ArrayList<Event>();
-        for (int i=0; i<eventsDatabase.size(); i++) {
-            if (eventsDatabase.get(i).getEventDate().equals(date)) {
-                if (eventsDatabase.get(i).getEventType().equals(name)){
+                if (eventsDatabase.get(i).getEventType().equals(filter)){
                     eventsToReturn.add(eventsDatabase.get(i));
                 }
             }
@@ -81,15 +76,22 @@ public class Database {
     
     public String getFirstPersonInThePersonList() {
         String personType = new String();
-        //check child classes here, MIFSAStudent is also a Student, so check first
+        //check child classes here, MIFSAStudent is also a Student, so check first, to get more specific info
         if (personDatabase.get(0) instanceof Teacher) {
+            //Downcasting from Person to child classes to get faculty name
+            Teacher t = (Teacher) personDatabase.get(0);
             personType = " [TE]";
+            return t.getName()+" "+t.getLastName()+" "+t.getFacultyName()+personType;
         } else if (personDatabase.get(0) instanceof MIFSAStudent) {
+            MIFSAStudent m = (MIFSAStudent) personDatabase.get(0);
             personType = " [SA]";
+            return m.getName()+" "+m.getLastName()+" "+m.getFacultyName()+personType;
         } else if (personDatabase.get(0) instanceof Student) {
+            Student s = (Student) personDatabase.get(0);
             personType = " [ST]";
+            return s.getName()+" "+s.getLastName()+" "+s.getFacultyName()+personType;
         } 
-        return personDatabase.get(0).getName()+" "+personDatabase.get(0).getLastName()+personType;
+        return null;
     }
     
     public void addItemToEventsDatabase(Event evt) {

@@ -18,9 +18,9 @@ public class NewPersonJFrame extends javax.swing.JFrame {
      * Creates new form NewPersonJFrame
      */
     String typeOfPerson;
-    String Name;
-    String Surname;
-    String subjectOfStudies;
+    String personName;
+    String personSurname;
+    String facultyName;
     int yearOfStudies;
     
     public NewPersonJFrame() {
@@ -48,7 +48,7 @@ public class NewPersonJFrame extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jTextField4 = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Name");
 
@@ -129,11 +129,14 @@ public class NewPersonJFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
         typeOfPerson = jComboBox1.getSelectedItem().toString();
-        Name = jTextField1.getText();
-        Surname = jTextField2.getText();
-        subjectOfStudies = jTextField3.getText();
-        yearOfStudies = Integer.parseInt(jTextField4.getText());
-        
+        String personNameInput = jTextField1.getText();
+        personName = personNameInput.substring(0, 1).toUpperCase() + personNameInput.substring(1);
+        String personSurnameInput = jTextField2.getText();
+        personSurname = personSurnameInput.substring(0, 1).toUpperCase() + personSurnameInput.substring(1);
+        facultyName = jTextField3.getText().toUpperCase();
+        if (!jTextField4.getText().isEmpty() && !(typeOfPerson.equals("Teacher"))) {
+            yearOfStudies = Integer.parseInt(jTextField4.getText());
+        }
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }//GEN-LAST:event_jButton1ActionPerformed
 

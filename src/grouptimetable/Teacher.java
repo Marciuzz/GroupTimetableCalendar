@@ -16,4 +16,7 @@ public class Teacher extends Person {
             this.facultyName = facultyName;
         }
     }
+    public String getFacultyName(){
+        return facultyName;
+    }
 }

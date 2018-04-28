@@ -283,36 +283,46 @@ public class MainJFrame extends javax.swing.JFrame {
         newPerson.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
         public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-            if (newPerson.typeOfPerson.equals("MIFSAStudent")){
-                MIFSAStudent mifsa = new MIFSAStudent(newPerson.Name, newPerson.Surname, newPerson.subjectOfStudies, newPerson.yearOfStudies);
-                db.addMIFSAToPersonsDatabase(mifsa);
-            }
-            else if (newPerson.typeOfPerson.equals("Student")){
-                Student stud = new Student(newPerson.Name, newPerson.Surname, newPerson.subjectOfStudies, newPerson.yearOfStudies);
-                db.addStudentToPersonsDatabase(stud);
-            }
-            else if (newPerson.typeOfPerson.equals("Teacher")){
-                //DEFAULT faculty for now
-                Teacher teac = new Teacher(newPerson.Name, newPerson.Surname, "MIF");
-                db.addTeacherToPersonsDatabase(teac);
+            if (newPerson.personName != null && newPerson.personSurname != null && newPerson.facultyName != null && (newPerson.yearOfStudies > 0 && newPerson.yearOfStudies < 5)) {
+                //Student block (with yearOfStudies)
+                if (newPerson.typeOfPerson.equals("MIFSAStudent")){
+                    MIFSAStudent mifsa = new MIFSAStudent(newPerson.personName, newPerson.personSurname, newPerson.facultyName, newPerson.yearOfStudies);
+                    db.addMIFSAToPersonsDatabase(mifsa);
+                }
+                else if (newPerson.typeOfPerson.equals("Student")){
+                    Student stud = new Student(newPerson.personName, newPerson.personSurname, newPerson.facultyName, newPerson.yearOfStudies);
+                    db.addStudentToPersonsDatabase(stud);
+                }   
+            } else if (newPerson.yearOfStudies == 0) {
+                //Teacher block (without yearOfStudies)
+                if (newPerson.typeOfPerson.equals("Teacher")){
+                    Teacher teac = new Teacher(newPerson.personName, newPerson.personSurname, newPerson.facultyName);
+                    db.addTeacherToPersonsDatabase(teac);
+                }
             } else {
-                System.out.println("New person was not created!");
-            }      
+                System.out.println("New person was not created! Please enter person information correctly");
+            }
+            //refresh person list
+            addPersonsToPersonList(db.getPersonList());
         }
     });       
     }//GEN-LAST:event_jButton2ActionPerformed
     
-    public void addPersonToPersonList(List<Person> personList) {
+    public void addPersonsToPersonList(List<Person> personList) {
         jList1.setModel(new DefaultListModel());
         DefaultListModel model = (DefaultListModel) jList1.getModel();
         for(Person p : personList){
             //check child classes here, MIFSAStudent is also a Student, so check first
             if (p instanceof Teacher) {
-                model.addElement(p.getName()+" "+p.getLastName()+" [TE]");
+                //Downcasting from Person to child classes to get faculty name
+                Teacher t = (Teacher) p;
+                model.addElement(t.getName()+" "+t.getLastName()+" "+t.getFacultyName()+" [TE]");
             } else if (p instanceof MIFSAStudent) {
-                model.addElement(p.getName()+" "+p.getLastName()+" [SA]");
+                MIFSAStudent m = (MIFSAStudent) p;
+                model.addElement(m.getName()+" "+m.getLastName()+" "+m.getFacultyName()+" [SA]");
             } else if (p instanceof Student) {
-                model.addElement(p.getName()+" "+p.getLastName()+" [ST]");
+                Student s = (Student) p;
+                model.addElement(s.getName()+" "+s.getLastName()+" "+s.getFacultyName()+" [ST]");
             } 
         }    
         jList1.setModel(model);     
@@ -324,7 +334,7 @@ public class MainJFrame extends javax.swing.JFrame {
     }
     public void getPersonList() {
         List<Person> personList = db.getPersonList();
-        addPersonToPersonList(personList);
+        addPersonsToPersonList(personList);
     }
     public void clearTimetable() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -335,11 +345,8 @@ public class MainJFrame extends javax.swing.JFrame {
         //center labels
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-        /////////////////
         TableCellRenderer buttonRenderer = new JTableButtonRenderer();
         for (int i=0; i<jTable1.getColumnCount(); i++){
-            
-            /////////////////////////////////////////
             if (i==2) {
                 jTable1.getColumnModel().getColumn(i).setCellRenderer(buttonRenderer); 
             } else {
@@ -362,21 +369,29 @@ public class MainJFrame extends javax.swing.JFrame {
     }
     public void getTimetable(String date, String personListItem) {
         //get Person's class from [ ] and add it to the personList, get the name from the personListItem
-        String personType = personListItem.substring(personListItem.indexOf("[") + 1, personListItem.indexOf("]"));
-        String personName = personListItem.substring(0, personListItem.indexOf("[")-1);
+        //String personType = personListItem.substring(personListItem.indexOf("[") + 1, personListItem.indexOf("]"));
+        //String personName = personListItem.substring(0, personListItem.indexOf("[")-1);
+        //get faculty here
+        // 0 - name, 1 - surname, 2 - faculty, 3 - [persontype]
+        String[] personListItemValues = personListItem.split(" ");
+        String personName = personListItemValues[0] + " " + personListItemValues[1];
+        String personType = personListItemValues[3].substring(personListItemValues[3].indexOf("[") + 1, personListItemValues[3].indexOf("]"));
+        String facultyName = personListItemValues[2];
+        
         clearTimetable();
-        List<Event> commonEventsOfTheDay = db.getCommonEventsOfTheDay(date);
-        List<Event> personalEventsOfTheDay = db.getPersonalEventsOfTheDay(date, personName);
-        //We can re-use a getPersonalEventsOfTheDay method in the Database class, and send a "SA" flag, so we can retrieve all mifsa events if it is a MIFSAStudent
+        List<Event> commonEventsOfTheDay = db.getEvents(date, "common");
+        List<Event> personalEventsOfTheDay = db.getEvents(date, personName);
+        List<Event> facultyEventsOfTheDay = db.getEvents(date, facultyName);
+        List<Event> sortedTimetable = sortTimetableByEventStartTime(commonEventsOfTheDay, personalEventsOfTheDay);
+        List<Event> sortedTimetable2 = sortTimetableByEventStartTime(sortedTimetable, facultyEventsOfTheDay);
+        //We can re-use a getEvents method in the Database class, and retrieve any events with a second string as a filter
                 
         if (personType.equals("SA")){
-            List<Event> sortedTimetable = sortTimetableByEventStartTime(commonEventsOfTheDay, personalEventsOfTheDay);
-            List<Event> mifsaEventsOfTheDay = db.getPersonalEventsOfTheDay(date, personType);
-            List<Event> sortedTimetable2 = sortTimetableByEventStartTime(mifsaEventsOfTheDay, sortedTimetable);
-            addEventsToTimetable(sortedTimetable2);
+            List<Event> mifsaEventsOfTheDay = db.getEvents(date, personType);
+            List<Event> sortedTimetable3 = sortTimetableByEventStartTime(mifsaEventsOfTheDay, sortedTimetable);
+            addEventsToTimetable(sortedTimetable3);
         } else {
-            List<Event> sortedTimetable = sortTimetableByEventStartTime(commonEventsOfTheDay, personalEventsOfTheDay);
-            addEventsToTimetable(sortedTimetable);
+            addEventsToTimetable(sortedTimetable2);
         }
     }
     public class SampleDateChangeListener implements DateChangeListener {
