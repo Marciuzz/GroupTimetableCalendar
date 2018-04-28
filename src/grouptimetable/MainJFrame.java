@@ -8,6 +8,7 @@ import com.github.lgooddatepicker.zinternaltools.YearMonthChangeEvent;
 import java.awt.Component;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -229,24 +230,41 @@ public class MainJFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jLabel2PropertyChange
 
-    /* TO REMOVE */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        NewEventJFrame newEvent = new NewEventJFrame();
+        NewEventJFrame newEvent = new NewEventJFrame(calendarPanel1.getSelectedDate());
         newEvent.setLocationRelativeTo(null);
         newEvent.setVisible(true);
         newEvent.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
                 if (newEvent.eventDate != null && newEvent.eventName != null && newEvent.eventHourTime != null && newEvent.eventType != null) {
+                    String dateString;
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                     //check if new event date is after todays date
                     if (newEvent.eventDate.compareTo(datePicker1.getDate().toString()) >=0 ){
+                        LocalDate localDate = LocalDate.parse(newEvent.eventDate);
                         if (newEvent.eventType.equals("personal")) {
-                            String personName = personListItem.substring(0, personListItem.indexOf("[")-1);
-                            Event newEvt = new Event(String.valueOf(db.getEventCount()),newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,personName);
-                            db.addItemToEventsDatabase(newEvt);
+                            // 0 - name, 1 - surname, 2 - faculty, 3 - [persontype]
+                            String[] personListItemValues = personListItem.split(" ");
+                            String personName = personListItemValues[0] + " " + personListItemValues[1];
+                            System.out.println(newEvent.weeksToRepeat+ " "+localDate.plusWeeks(newEvent.weeksToRepeat));
+                            if (newEvent.weeksToRepeat == 0) {
+                                dateString = localDate.format(formatter);
+                                Event newEvt = new Event(String.valueOf(db.getEventCount()),dateString,newEvent.eventHourTime,newEvent.eventName,personName);
+                                db.addItemToEventsDatabase(newEvt);
+                            } else {
+                                for (int i=0; i<newEvent.weeksToRepeat; i++) {
+                                    dateString = localDate.plusWeeks(i).format(formatter);
+                                    Event newEvt = new Event(String.valueOf(db.getEventCount()),dateString,newEvent.eventHourTime,newEvent.eventName,personName);
+                                    db.addItemToEventsDatabase(newEvt);
+                                }
+                            }
                         } else {
-                            Event newEvt = new Event(String.valueOf(db.getEventCount()),newEvent.eventDate,newEvent.eventHourTime,newEvent.eventName,newEvent.eventType);
-                            db.addItemToEventsDatabase(newEvt);
+                            for (int i=0; i<newEvent.weeksToRepeat; i++) {
+                                dateString = localDate.plusWeeks(i).format(formatter);
+                                Event newEvt = new Event(String.valueOf(db.getEventCount()),dateString,newEvent.eventHourTime,newEvent.eventName,newEvent.eventType);
+                                db.addItemToEventsDatabase(newEvt);
+                            }
                         }
                         //refresh timetable after an event is created
                         getTimetable(LocalDate.now().toString(), personListItem);
@@ -385,7 +403,8 @@ public class MainJFrame extends javax.swing.JFrame {
         List<Event> sortedTimetable = sortTimetableByEventStartTime(commonEventsOfTheDay, personalEventsOfTheDay);
         List<Event> sortedTimetable2 = sortTimetableByEventStartTime(sortedTimetable, facultyEventsOfTheDay);
         //We can re-use a getEvents method in the Database class, and retrieve any events with a second string as a filter
-                
+        
+        //only if a person is SA member, we retrieve events from db        
         if (personType.equals("SA")){
             List<Event> mifsaEventsOfTheDay = db.getEvents(date, personType);
             List<Event> sortedTimetable3 = sortTimetableByEventStartTime(mifsaEventsOfTheDay, sortedTimetable);

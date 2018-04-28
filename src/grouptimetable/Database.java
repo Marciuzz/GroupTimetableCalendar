@@ -1,11 +1,8 @@
 package grouptimetable;
 
 import java.util.List;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 
 public class Database {
     //Initialization using Arrays.asList, imitates having predefined data e.g. in file system
@@ -96,6 +93,7 @@ public class Database {
     
     public void addItemToEventsDatabase(Event evt) {
         eventsDatabase.add(evt);
+        System.out.println("Adding item to db: "+evt.eventDate);
     }
     
     public void removeItemFromDatabase(String eventId) {
