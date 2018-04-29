@@ -3,16 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar/src/grouptimetable/MIFSAStudent.java</file>
-            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar/src/grouptimetable/NewPersonJFrame.java</file>
-            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar/src/grouptimetable/Main.java</file>
-            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar/src/grouptimetable/Person.java</file>
-            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar/src/grouptimetable/Database.java</file>
-            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar/src/grouptimetable/Student.java</file>
-            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar/src/grouptimetable/Event.java</file>
-            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar/src/grouptimetable/Teacher.java</file>
-            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar/src/grouptimetable/MainJFrame.java</file>
-            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar/src/grouptimetable/NewEventJFrame.java</file>
+            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar-master/src/GroupTimetable/calendar/design/NewPersonJFrame.java</file>
+            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar-master/src/GroupTimetable/calendar/Calendar.java</file>
+            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar-master/src/GroupTimetable/calendar/database/Database.java</file>
+            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar-master/src/GroupTimetable/calendar/design/NewEventJFrame.java</file>
+            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar-master/src/GroupTimetable/calendar/design/MainJFrame.java</file>
         </group>
     </open-files>
 </project-private>
