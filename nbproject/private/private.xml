@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/MG/Documents/NetBeansProjects/GroupTimetableCalendar/src/grouptimetable/Main.java</file>
             <file>file:/C:/Users/MG/Documents/NetBeansProjects/GroupTimetableCalendar/src/grouptimetable/NewEventJFrame.java</file>
             <file>file:/C:/Users/MG/Documents/NetBeansProjects/GroupTimetableCalendar/src/grouptimetable/MainJFrame.java</file>
@@ -14,6 +15,13 @@
             <file>file:/C:/Users/MG/Documents/NetBeansProjects/GroupTimetableCalendar/src/grouptimetable/Event.java</file>
             <file>file:/C:/Users/MG/Documents/NetBeansProjects/GroupTimetableCalendar/src/grouptimetable/MIFSAStudent.java</file>
             <file>file:/C:/Users/MG/Documents/NetBeansProjects/GroupTimetableCalendar/src/grouptimetable/Student.java</file>
+=======
+            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar-master/src/GroupTimetable/calendar/design/NewPersonJFrame.java</file>
+            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar-master/src/GroupTimetable/calendar/Calendar.java</file>
+            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar-master/src/GroupTimetable/calendar/database/Database.java</file>
+            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar-master/src/GroupTimetable/calendar/design/NewEventJFrame.java</file>
+            <file>file:/C:/Users/Dell/Desktop/GroupTimetableCalendar-master/src/GroupTimetable/calendar/design/MainJFrame.java</file>
+>>>>>>> 4280dc0b02a94dc6225cb46b91df2a6566e99a71
         </group>
     </open-files>
 </project-private>
